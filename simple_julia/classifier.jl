@@ -1,24 +1,42 @@
-function count_single_recurrences(z)
-    nstep = size(z, 2)
-    q0 = z[1,1]
-    q1 = z[1,2]
+function unwrap(x)
+    y = Array{Float64}(undef, size(x))
+    y[1] = x[1]
+    for i in 1:size(x,1)-1
+        if x[i+1] < x[i]
+            y[i+1] = x[i+1] + 2*pi
+        else
+            y[i+1] = y[i] + x[i+1] - x[i]
+        end
+    end
+    return y
+end
 
-    kpoi_interval = findall(qi -> q0 <= qi < q1, z[1,:])
+function count_recurrences(z, order=1)
+    nstep = size(z, 2)
+
+    q = unwrap(z[1,:])
+    p = z[2,:]
+
+    kpoi_interval = findall(qi -> q[1] <= mod(qi,2*pi) < q[2], q)
     npoi_interval = length(kpoi_interval)
 
-    N1 = Array{Int32}(undef, npoi_interval)
+    N = Array{Int32}(undef, npoi_interval)
     too_short_time = Array{Bool}(undef, npoi_interval)
     for i in 1:npoi_interval
         k = kpoi_interval[i]
         too_short_time[i] = 1
         for k2 in k:nstep-1
-            if z[1,k2] < q0 && z[1,k2+1] >= q0
-                N1[i] = k2-k
-                too_short_time[i] = 0
-                break
+            counter = 0
+            if mod(q[k2],2*pi) < q[1] && mod(q[k2+1],2*pi) >= q[1]
+                counter+=1
+                if counter == order
+                    N[i] = k2-k
+                    too_short_time[i] = 0
+                    break
+                end
             end
         end
     end
 
-    return N1, too_short_time
+    return N, too_short_time
 end

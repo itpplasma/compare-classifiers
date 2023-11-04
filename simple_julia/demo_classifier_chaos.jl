@@ -18,9 +18,13 @@ end
 
 z = [q';p']
 
-N1,too_short_time = count_single_recurrences(z)
+N1,too_short_time = count_recurrences(z)
 println("Recurrence numbers N1:")
 println(N1[.!too_short_time])
+
+N2,too_short_time = count_recurrences(z, 2)
+println("Recurrence numbers N2:")
+println(N2[.!too_short_time])
 
 
 # Plot the results
@@ -45,9 +49,13 @@ end
 
 z = [q2';p2']
 
-N1,too_short_time = count_single_recurrences(z)
+N1,too_short_time = count_recurrences(z)
 println("Recurrence numbers N1:")
 println(N1[.!too_short_time])
+
+N2,too_short_time = count_recurrences(z, 2)
+println("Recurrence numbers N2:")
+println(N2[.!too_short_time])
 
 # Plot the results
 plot(q2, p2, seriestype=:scatter, markersize=0.5, legend=false)
