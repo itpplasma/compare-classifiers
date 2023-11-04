@@ -1,3 +1,5 @@
+using Plots
+
 include("standard_map.jl")
 include("classifier.jl")
 
