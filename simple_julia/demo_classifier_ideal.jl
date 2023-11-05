@@ -1,3 +1,4 @@
+#%%
 using Plots
 
 include("standard_map.jl")
@@ -16,15 +17,8 @@ for k in 1:tmax
     q[k+1], p[k+1] = standard_map(q[k], p[k], K)
 end
 
-z = [q';p']
-
-N1,too_short_time = count_recurrences(z)
-println("Recurrence numbers N1:")
-println(N1[.!too_short_time])
-
-N2,too_short_time = count_recurrences(z, 2)
-println("Recurrence numbers N2:")
-println(N2[.!too_short_time])
+krec = find_recurrences(q)
+println("Classified as ideal: ", classify(krec))
 
 # Now take points in some interval and sort them
 kpoi_interval = findall(qi -> q[1] <= qi < q[2], q)
@@ -71,7 +65,7 @@ plot!(z7, linewidth=5, linecolor=:yellow, linealpha=0.5)
 savefig("8.png")
 plot!(z8, linewidth=5, linecolor=:orange, linealpha=0.5)
 savefig("9.png")
-#plot!(z7[invperm(sort_order)][N1.==5], seriestype=:scatter, color=:yellow)
+plot!(z7[invperm(sort_order)][2:end][krec[2,2:end] - krec[1,2:end].==6], seriestype=:scatter, color=:yellow)
 savefig("earlypoints.png")
-#plot!(z8full[invperm(sort_order)][N1.==6], seriestype=:scatter, color=:orange)
+plot!(z8full[invperm(sort_order)][2:end][krec[2,2:end] - krec[1,2:end].==7], seriestype=:scatter, color=:orange)
 savefig("latepoints.png")

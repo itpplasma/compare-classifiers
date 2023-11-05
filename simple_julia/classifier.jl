@@ -1,50 +1,55 @@
-function unwrap(x)
-    y = Array{Float64}(undef, size(x))
-    y[1] = x[1]
-    for i in 1:size(x,1)-1
-        if x[i+1] < x[i]
-            y[i+1] = x[i+1] + 2*pi
-        else
-            y[i+1] = y[i] + x[i+1] - x[i]
+include("util.jl")
+
+function classify(krec, maxorder=size(krec,1))
+    for order in 1:maxorder
+        recnum = get_recurrence_numbers(krec, order)
+        if (all(recnum .<= 0))
+            break
+        end
+        difference = recnum[recnum.>0] .- recnum[1]
+        if !all(x -> x in (0,1), difference)
+            return false
         end
     end
-    return y
-end
-
-# https://math.stackexchange.com/questions/2275439/check-if-point-on-circle-is-between-two-other-points-on-circle
-function is_x3_between_x1_and_x2(x1, x2, x3)
-    x1_x2 = mod(x2 - x1 + 2π, 2π)
-    x1_x3 = mod(x3 - x1 + 2π, 2π)
-
-    return (x1_x2 <= π) ⊻ (x1_x3 > x1_x2)
+    return true
 end
 
 
-function count_recurrences(z, order=1)
-    nstep = size(z, 2)
-
-    q = z[1,:]
+function find_recurrences(q)
+    nstep = length(q)
 
     kpoi_interval = findall(qi -> is_x3_between_x1_and_x2(q[1], q[2], qi), q)
     npoi_interval = length(kpoi_interval)
 
-    N = Array{Int32}(undef, npoi_interval)
-    too_short_time = Array{Bool}(undef, npoi_interval)
-    for i in 1:npoi_interval
-        k = kpoi_interval[i]
-        too_short_time[i] = 1
-        counter = 0
-        for k2 in k+1:nstep-1
-            if is_x3_between_x1_and_x2(q[1], q[2], q[k2+1])
+    if npoi_interval < 2
+        return Array{Int32}(undef, 0, 0)
+    end
+    krec = Array{Int32}(undef, length(q), npoi_interval-1)
+    krec .= 0
+    for i in 1:npoi_interval-1
+        kfirst = kpoi_interval[i+1]
+        krec[1, i] = kfirst
+        counter = 1
+        for k2 in kfirst+1:nstep
+            if is_x3_between_x1_and_x2(q[1], q[2], q[k2])
                 counter+=1
-                if counter == order
-                    N[i] = k2-k
-                    too_short_time[i] = 0
-                    break
-                end
+                krec[counter, i] = k2
             end
         end
     end
 
-    return N, too_short_time
+    return krec
+end
+
+
+function get_recurrence_numbers(krec, order=1)
+    recnum = Array{Int32}(undef, size(krec, 1), size(krec, 2))
+    recnum .= 0
+    for i in 1:size(krec, 1) - order
+        recnum[i, :] = krec[i+order, :] - krec[i, :]
+        if (all(recnum[i, :] .<= 0))
+            break
+        end
+    end
+    return recnum
 end

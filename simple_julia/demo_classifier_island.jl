@@ -1,3 +1,4 @@
+#%%
 using Plots
 
 include("standard_map.jl")
@@ -22,9 +23,10 @@ p_interval = p[kpoi_interval]
 
 z = [q';p']
 
-N1,too_short_time = count_single_recurrences(z)
-println("Recurrence numbers N1:")
-println(N1[.!too_short_time])
+krec = find_recurrences(q)
+println("Classified as ideal: ", classify(krec))
+
+#%%
 
 # Get the sorting order according to q
 sort_order = sortperm(q_interval)

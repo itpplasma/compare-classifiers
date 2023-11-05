@@ -1,3 +1,4 @@
+#%%
 using Plots
 
 include("standard_map.jl")
@@ -16,17 +17,10 @@ for k in 1:tmax
     q[k+1], p[k+1] = standard_map(q[k], p[k], K)
 end
 
-z = [q';p']
+krec = find_recurrences(q)
+println("Classified as ideal: ", classify(krec))
 
-N1,too_short_time = count_recurrences(z)
-println("Recurrence numbers N1:")
-println(N1[.!too_short_time])
-
-N2,too_short_time = count_recurrences(z, 2)
-println("Recurrence numbers N2:")
-println(N2[.!too_short_time])
-
-
+#%%
 # Plot the results
 plot(q, p, seriestype=:scatter, markersize=0.5, legend=false)
 xlims!(0, 2*pi)
@@ -47,15 +41,8 @@ for k in 1:tmax2
     q2[k+1], p2[k+1] = standard_map(q2[k], p2[k], K)
 end
 
-z = [q2';p2']
-
-N1,too_short_time = count_recurrences(z)
-println("Recurrence numbers N1:")
-println(N1[.!too_short_time])
-
-N2,too_short_time = count_recurrences(z, 2)
-println("Recurrence numbers N2:")
-println(N2[.!too_short_time])
+krec2 = find_recurrences(q2)
+println("Classified as ideal: ", classify(krec))
 
 # Plot the results
 plot(q2, p2, seriestype=:scatter, markersize=0.5, legend=false)
