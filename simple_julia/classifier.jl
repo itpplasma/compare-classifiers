@@ -23,8 +23,7 @@ end
 function count_recurrences(z, order=1)
     nstep = size(z, 2)
 
-    q = unwrap(z[1,:])
-    p = z[2,:]
+    q = z[1,:]
 
     kpoi_interval = findall(qi -> is_x3_between_x1_and_x2(q[1], q[2], qi), q)
     npoi_interval = length(kpoi_interval)
@@ -34,8 +33,8 @@ function count_recurrences(z, order=1)
     for i in 1:npoi_interval
         k = kpoi_interval[i]
         too_short_time[i] = 1
-        for k2 in k:nstep-1
-            counter = 0
+        counter = 0
+        for k2 in k+1:nstep-1
             if is_x3_between_x1_and_x2(q[1], q[2], q[k2+1])
                 counter+=1
                 if counter == order
