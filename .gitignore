@@ -37,3 +37,4 @@ simple_example/wout.nc
 healaxis.dat
 simple_example/example.x
 *.png
+*.pyc
