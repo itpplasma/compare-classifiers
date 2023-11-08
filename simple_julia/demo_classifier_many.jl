@@ -24,9 +24,9 @@ for k in 1:tmax
 end
 
 
-k_ideal_old = Int[]
+global k_ideal_old = Int[]
 # Plot the results
-for kclass = (16, 32, 64, 128, 256, 512)
+for kclass = (16, 32, 64, 128, 256, 512, 1024)
     k_ideal = Int[]
     k_non_ideal = Int[]
 
@@ -40,8 +40,8 @@ for kclass = (16, 32, 64, 128, 256, 512)
         end
     end
 
-    println(length(k_ideal_old) - length(k_ideal))
-    k_ideal_old = k_ideal
+    println(length(k_ideal))
+    global k_ideal_old = k_ideal
 
     plot(q[k_ideal,:], p[k_ideal,:], seriestype=:scatter, color=:blue, markersize=0.5, markerstrokewidth=0, legend=false)
 
