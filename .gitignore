@@ -30,8 +30,7 @@
 *.exe
 *.out
 *.app
-simple_example/cut.dat
-simple_example/orbit.dat
+simple_example/*.dat
 simple_example/wout.nc
 *.x
 healaxis.dat
