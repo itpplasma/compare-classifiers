@@ -30,11 +30,13 @@ plt.ylabel('theta')
 
 # Canonical
 plt.figure()
+plt.title('Canonical variables')
 plt.plot(var_tips_can[:, 1], var_tips_can[:, 0], 'r.')
 plt.xlabel('p_theta')
 plt.ylabel('theta')
 
 plt.figure()
+plt.title('Canonical variables')
 plt.plot(var_torcut_can[:, 1], var_torcut_can[:, 0], 'b.')
 plt.xlabel('p_theta')
 plt.ylabel('theta')

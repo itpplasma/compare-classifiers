@@ -4,3 +4,4 @@ matplotlib
 f90wrap
 jupyter
 numba
+sympy
